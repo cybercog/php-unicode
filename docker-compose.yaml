@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  php81:
+    container_name: php-unicode-lib-81
+    image: php-unicode-lib
+    build:
+      context: ./
+      dockerfile: ./.docker/php/php81/Dockerfile
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  php82:
+    container_name: php-unicode-lib-82
+    image: php-unicode-lib
+    build:
+      context: ./
+      dockerfile: ./.docker/php/php82/Dockerfile
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  php83:
+    container_name: php-unicode-lib-83
+    image: php-unicode-lib
+    build:
+      context: ./
+      dockerfile: ./.docker/php/php83/Dockerfile
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./:/app

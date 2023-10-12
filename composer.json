@@ -1,0 +1,47 @@
+{
+    "name": "cybercog/php-unicode",
+    "description": "PHP Unicode library",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "cog",
+        "unicode",
+        "code-point",
+        "character",
+        "composite-character",
+        "symbol",
+        "emoji",
+        "html-entity",
+        "xml-entity"
+    ],
+    "authors": [
+        {
+            "name": "Anton Komarev",
+            "email": "anton@komarev.com",
+            "homepage": "https://komarev.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cog\\Unicode\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\Unit\\Cog\\Unicode\\": "test/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true
+}
