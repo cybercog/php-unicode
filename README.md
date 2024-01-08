@@ -23,7 +23,7 @@ composer require cybercog/php-unicode
 ### Instantiate Unicode String
 
 ```php
-$compositeCharacter = \Cog\Unicode\UnicodeString::of('Hello');
+$string = \Cog\Unicode\UnicodeString::of('Hello');
 ```
 
 `UnicodeString` object will contain a list of Unicode characters.
@@ -38,9 +38,9 @@ For example, the Unicode string "Hello" is represented by the code points:
 ### Represent Unicode String
 
 ```php
-$compositeCharacter = \Cog\Unicode\UnicodeString::of('Hello');
+$string = \Cog\Unicode\UnicodeString::of('Hello');
 
-echo strval($compositeCharacter); // (string) "Hello"
+echo strval($string); // (string) "Hello"
 ```
 
 ### Instantiate Unicode Character
