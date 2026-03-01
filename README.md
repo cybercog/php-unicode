@@ -86,11 +86,7 @@ $grapheme = \Cog\Unicode\Grapheme::of('👨‍👩‍👧‍👦');
 
 echo strval($grapheme); // (string) "👨‍👩‍👧‍👦"
 
-echo $grapheme->codePointCount(); // (int) 7
-
-echo $grapheme->isSingleCodePoint(); // (bool) false
-
-$codePointList = $grapheme->codePointList(); // list<CodePoint>
+$codePointList = $grapheme->codePointList; // list<CodePoint>
 ```
 
 ### Grapheme String (grapheme cluster level)

@@ -41,7 +41,7 @@ Four final, immutable classes with private constructors and static factory metho
 - **`UnicodeString`** (`src/UnicodeString.php`): Sequence of `CodePoint` objects. Created via `of()` or `ofCodePointList()`. Splits strings by code points using `preg_split`.
 
 **Grapheme level (requires `ext-intl`):**
-- **`Grapheme`** (`src/Grapheme.php`): Single grapheme cluster (user-perceived character), contains `list<CodePoint>`. Created via `of()` or `ofCodePointList()`. Provides `codePointList()`, `codePointCount()`, `isSingleCodePoint()`.
+- **`Grapheme`** (`src/Grapheme.php`): Single grapheme cluster (user-perceived character), contains `list<CodePoint>`. Created via `of()` or `ofCodePointList()`.
 - **`GraphemeString`** (`src/GraphemeString.php`): Sequence of `Grapheme` objects. Created via `of()` or `ofGraphemeList()`. Splits strings by grapheme clusters using `grapheme_*` functions.
 
 All classes use `declare(strict_types=1)` and readonly properties.

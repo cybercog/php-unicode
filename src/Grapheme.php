@@ -87,14 +87,4 @@ final class Grapheme implements \Stringable
     {
         return implode('', $this->codePointList);
     }
-
-    public function codePointCount(): int
-    {
-        return count($this->codePointList);
-    }
-
-    public function isSingleCodePoint(): bool
-    {
-        return count($this->codePointList) === 1;
-    }
 }

@@ -27,8 +27,7 @@ final class GraphemeTest extends TestCase
         $grapheme = Grapheme::of($graphemeString);
 
         $this->assertSame($graphemeString, strval($grapheme));
-        $this->assertSame(1, $grapheme->codePointCount());
-        $this->assertTrue($grapheme->isSingleCodePoint());
+        $this->assertCount(1, $grapheme->codePointList);
     }
 
     #[DataProvider('provideMultiCodePointGraphemes')]
@@ -39,8 +38,7 @@ final class GraphemeTest extends TestCase
         $grapheme = Grapheme::of($graphemeString);
 
         $this->assertSame($graphemeString, strval($grapheme));
-        $this->assertSame($expectedCodePointCount, $grapheme->codePointCount());
-        $this->assertFalse($grapheme->isSingleCodePoint());
+        $this->assertCount($expectedCodePointCount, $grapheme->codePointList);
     }
 
     public function testItCanInstantiateOfCodePointList(): void
@@ -53,8 +51,7 @@ final class GraphemeTest extends TestCase
         $grapheme = Grapheme::ofCodePointList($codePoints);
 
         $this->assertSame("e\u{0301}", strval($grapheme));
-        $this->assertSame(2, $grapheme->codePointCount());
-        $this->assertFalse($grapheme->isSingleCodePoint());
+        $this->assertCount(2, $grapheme->codePointList);
     }
 
     public function testItReturnsCodePointList(): void
@@ -82,8 +79,7 @@ final class GraphemeTest extends TestCase
         $grapheme = Grapheme::of('👨‍👩‍👧‍👦');
 
         $this->assertSame('👨‍👩‍👧‍👦', strval($grapheme));
-        $this->assertSame(7, $grapheme->codePointCount());
-        $this->assertFalse($grapheme->isSingleCodePoint());
+        $this->assertCount(7, $grapheme->codePointList);
     }
 
     public function testFlagEmojiIsSingleGrapheme(): void
@@ -91,8 +87,7 @@ final class GraphemeTest extends TestCase
         $grapheme = Grapheme::of('🇦🇶');
 
         $this->assertSame('🇦🇶', strval($grapheme));
-        $this->assertSame(2, $grapheme->codePointCount());
-        $this->assertFalse($grapheme->isSingleCodePoint());
+        $this->assertCount(2, $grapheme->codePointList);
     }
 
     public function testItCannotInstantiateOfEmptyString(): void
