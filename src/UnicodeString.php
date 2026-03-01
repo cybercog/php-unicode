@@ -7,21 +7,20 @@ namespace Cog\Unicode;
 final class UnicodeString
 {
     /**
-     * @param list<Character> $characterList
+     * @param list<CodePoint> $codePointList
      */
     private function __construct(
-        public readonly array $characterList,
-    ) {
-    }
+        public readonly array $codePointList,
+    ) {}
 
     /**
-     * @param list<Character> $characterList
+     * @param list<CodePoint> $codePointList
      */
-    public static function ofCharacterList(
-        array $characterList,
+    public static function ofCodePointList(
+        array $codePointList,
     ): self {
         return new self(
-            $characterList,
+            $codePointList,
         );
     }
 
@@ -30,27 +29,27 @@ final class UnicodeString
     ): self {
         $charList = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-        $characterList = [];
+        $codePointList = [];
 
         foreach ($charList as $char) {
-            $characterList[] = Character::of($char);
+            $codePointList[] = CodePoint::of($char);
         }
 
         return new self(
-            $characterList,
+            $codePointList,
         );
     }
 
     public function __toString(): string
     {
-        return implode('', $this->characterList);
+        return implode('', $this->codePointList);
     }
 
     /**
-     * @return list<Character> $characterList
+     * @return list<CodePoint>
      */
-    public function characterList(): array
+    public function codePointList(): array
     {
-        return $this->characterList;
+        return $this->codePointList;
     }
 }

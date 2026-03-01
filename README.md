@@ -8,7 +8,11 @@
 
 ## Introduction
 
-Streamline Unicode strings and characters (code points) manipulations. Object oriented implementation.
+Streamline Unicode strings, code points and grapheme clusters manipulations. Object oriented implementation.
+
+The library provides two levels of abstraction:
+- **Code point level** (`CodePoint`, `UnicodeString`) — works with individual Unicode code points. Requires `ext-mbstring`.
+- **Grapheme level** (`Grapheme`, `GraphemeString`) — works with user-perceived characters (grapheme clusters). Requires `ext-intl`.
 
 ## Installation
 
@@ -18,15 +22,47 @@ Pull in the package through Composer.
 composer require cybercog/php-unicode
 ```
 
+For grapheme cluster support, install the `intl` PHP extension.
+
 ## Usage
 
-### Instantiate Unicode String
+### Code Point
+
+```php
+$codePoint = \Cog\Unicode\CodePoint::of('ÿ');
+
+$codePoint = \Cog\Unicode\CodePoint::ofDecimal(255);
+
+$codePoint = \Cog\Unicode\CodePoint::ofHexadecimal('U+00FF');
+
+$codePoint = \Cog\Unicode\CodePoint::ofHtmlEntity('&yuml;');
+
+$codePoint = \Cog\Unicode\CodePoint::ofXmlEntity('&#xff;');
+```
+
+### Represent Code Point in any format
+
+```php
+$codePoint = \Cog\Unicode\CodePoint::of('ÿ');
+
+echo strval($codePoint); // (string) "ÿ"
+
+echo $codePoint->toDecimal(); // (int) 255
+
+echo $codePoint->toHexadecimal(); // (string) "U+00FF"
+
+echo $codePoint->toHtmlEntity(); // (string) "&yuml;"
+
+echo $codePoint->toXmlEntity(); // (string) "&#xff;"
+```
+
+### Unicode String (code point level)
 
 ```php
 $string = \Cog\Unicode\UnicodeString::of('Hello');
 ```
 
-`UnicodeString` object will contain a list of Unicode characters.
+`UnicodeString` object will contain a list of code points.
 
 For example, the Unicode string "Hello" is represented by the code points:
 - U+0048 (H)
@@ -35,42 +71,39 @@ For example, the Unicode string "Hello" is represented by the code points:
 - U+006C (l)
 - U+006F (o)
 
-### Represent Unicode String
-
 ```php
-$string = \Cog\Unicode\UnicodeString::of('Hello');
-
 echo strval($string); // (string) "Hello"
+
+$codePointList = $string->codePointList; // list<CodePoint>
 ```
 
-### Instantiate Unicode Character
+### Grapheme (grapheme cluster level)
+
+Requires `ext-intl`.
 
 ```php
-$character = \Cog\Unicode\Character::of('ÿ');
+$grapheme = \Cog\Unicode\Grapheme::of('👨‍👩‍👧‍👦');
 
-$character = \Cog\Unicode\Character::ofDecimal(255);
+echo strval($grapheme); // (string) "👨‍👩‍👧‍👦"
 
-$character = \Cog\Unicode\Character::ofHexadecimal('U+00FF');
+echo $grapheme->codePointCount(); // (int) 7
 
-$character = \Cog\Unicode\Character::ofHtmlEntity('&yuml;');
+echo $grapheme->isSingleCodePoint(); // (bool) false
 
-$character = \Cog\Unicode\Character::ofXmlEntity('&#xff;');
+$codePointList = $grapheme->codePointList(); // list<CodePoint>
 ```
 
-### Represent Unicode Character in any format
+### Grapheme String (grapheme cluster level)
+
+Requires `ext-intl`.
 
 ```php
-$character = \Cog\Unicode\Character::of('ÿ');
+$string = \Cog\Unicode\GraphemeString::of('Ае👨‍👩‍👧‍👦');
 
-echo strval($character); // (string) "ÿ"
+$graphemeList = $string->graphemeList; // list<Grapheme>
+// 'А', 'е', '👨‍👩‍👧‍👦' — 3 graphemes (not 9 code points)
 
-echo $character->toDecimal(); // (int) 255
-
-echo $character->toHexadecimal(); // (string) "U+00FF"
-
-echo $character->toHtmlEntity(); // (string) "&yuml;"
-
-echo $character->toXmlEntity(); // (string) "&#xff;"
+echo strval($string); // (string) "Ае👨‍👩‍👧‍👦"
 ```
 
 ## License

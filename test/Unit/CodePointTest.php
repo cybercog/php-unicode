@@ -13,41 +13,41 @@ declare(strict_types=1);
 
 namespace Test\Unit\Cog\Unicode;
 
-use Cog\Unicode\Character;
+use Cog\Unicode\CodePoint;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-final class CharacterTest extends TestCase
+final class CodePointTest extends TestCase
 {
     #[DataProvider('provideUnicodeMap')]
-    public function testItCanInstantiateOfCharacter(
+    public function testItCanInstantiateOfCodePoint(
         string $char,
         int $decimal,
         string $hexadecimal,
         string $htmlEntity,
         string $xmlEntity,
     ): void {
-        $character = Character::of($char);
+        $codePoint = CodePoint::of($char);
 
         $this->assertSame(
             $char,
-            strval($character),
+            strval($codePoint),
         );
         $this->assertSame(
             $decimal,
-            $character->toDecimal(),
+            $codePoint->toDecimal(),
         );
         $this->assertSame(
             $hexadecimal,
-            $character->toHexadecimal(),
+            $codePoint->toHexadecimal(),
         );
         $this->assertSame(
             $htmlEntity,
-            $character->toHtmlEntity(),
+            $codePoint->toHtmlEntity(),
         );
         $this->assertSame(
             $xmlEntity,
-            $character->toXmlEntity(),
+            $codePoint->toXmlEntity(),
         );
     }
 
@@ -59,27 +59,27 @@ final class CharacterTest extends TestCase
         string $htmlEntity,
         string $xmlEntity,
     ): void {
-        $character = Character::ofDecimal($decimal);
+        $codePoint = CodePoint::ofDecimal($decimal);
 
         $this->assertSame(
             $char,
-            strval($character),
+            strval($codePoint),
         );
         $this->assertSame(
             $decimal,
-            $character->toDecimal(),
+            $codePoint->toDecimal(),
         );
         $this->assertSame(
             $hexadecimal,
-            $character->toHexadecimal(),
+            $codePoint->toHexadecimal(),
         );
         $this->assertSame(
             $htmlEntity,
-            $character->toHtmlEntity(),
+            $codePoint->toHtmlEntity(),
         );
         $this->assertSame(
             $xmlEntity,
-            $character->toXmlEntity(),
+            $codePoint->toXmlEntity(),
         );
     }
 
@@ -91,27 +91,27 @@ final class CharacterTest extends TestCase
         string $htmlEntity,
         string $xmlEntity,
     ): void {
-        $character = Character::ofHexadecimal($hexadecimal);
+        $codePoint = CodePoint::ofHexadecimal($hexadecimal);
 
         $this->assertSame(
             $char,
-            strval($character),
+            strval($codePoint),
         );
         $this->assertSame(
             $decimal,
-            $character->toDecimal(),
+            $codePoint->toDecimal(),
         );
         $this->assertSame(
             $hexadecimal,
-            $character->toHexadecimal(),
+            $codePoint->toHexadecimal(),
         );
         $this->assertSame(
             $htmlEntity,
-            $character->toHtmlEntity(),
+            $codePoint->toHtmlEntity(),
         );
         $this->assertSame(
             $xmlEntity,
-            $character->toXmlEntity(),
+            $codePoint->toXmlEntity(),
         );
     }
 
@@ -123,27 +123,27 @@ final class CharacterTest extends TestCase
         string $htmlEntity,
         string $xmlEntity,
     ): void {
-        $character = Character::ofHtmlEntity($htmlEntity);
+        $codePoint = CodePoint::ofHtmlEntity($htmlEntity);
 
         $this->assertSame(
             $char,
-            strval($character),
+            strval($codePoint),
         );
         $this->assertSame(
             $decimal,
-            $character->toDecimal(),
+            $codePoint->toDecimal(),
         );
         $this->assertSame(
             $hexadecimal,
-            $character->toHexadecimal(),
+            $codePoint->toHexadecimal(),
         );
         $this->assertSame(
             $htmlEntity,
-            $character->toHtmlEntity(),
+            $codePoint->toHtmlEntity(),
         );
         $this->assertSame(
             $xmlEntity,
-            $character->toXmlEntity(),
+            $codePoint->toXmlEntity(),
         );
     }
 
@@ -159,46 +159,46 @@ final class CharacterTest extends TestCase
             $this->markTestSkipped('XML does not have NULL value');
         }
 
-        $character = Character::ofXmlEntity($xmlEntity);
+        $codePoint = CodePoint::ofXmlEntity($xmlEntity);
 
         $this->assertSame(
             $char,
-            strval($character),
+            strval($codePoint),
         );
         $this->assertSame(
             $decimal,
-            $character->toDecimal(),
+            $codePoint->toDecimal(),
         );
         $this->assertSame(
             $hexadecimal,
-            $character->toHexadecimal(),
+            $codePoint->toHexadecimal(),
         );
         $this->assertSame(
             $htmlEntity,
-            $character->toHtmlEntity(),
+            $codePoint->toHtmlEntity(),
         );
         $this->assertSame(
             $xmlEntity,
-            $character->toXmlEntity(),
+            $codePoint->toXmlEntity(),
         );
     }
 
-    public function testItCannotInstantiateOfCharacterWithEmptyString(): void
+    public function testItCannotInstantiateOfCodePointWithEmptyString(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $char = '';
 
-        Character::of($char);
+        CodePoint::of($char);
     }
 
-    public function testItCannotInstantiateOfCharacterWithMoreThanOneCharacter(): void
+    public function testItCannotInstantiateOfCodePointWithMoreThanOneCodePoint(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $char = 'AA';
 
-        Character::of($char);
+        CodePoint::of($char);
     }
 
     public function testItCannotInstantiateOfDecimalWithNegativeValue(): void
@@ -207,7 +207,7 @@ final class CharacterTest extends TestCase
 
         $decimal = -1;
 
-        Character::ofDecimal($decimal);
+        CodePoint::ofDecimal($decimal);
     }
 
     public function testItCannotInstantiateOfHexadecimalWithTooLowValue(): void
@@ -216,7 +216,7 @@ final class CharacterTest extends TestCase
 
         $hexadecimal = 'U+FFFFFFFE'; // Min unicode hexadecimal -1
 
-        Character::ofHexadecimal($hexadecimal);
+        CodePoint::ofHexadecimal($hexadecimal);
     }
 
     public function testItCannotInstantiateOfHexadecimalWithTooBigValue(): void
@@ -225,7 +225,7 @@ final class CharacterTest extends TestCase
 
         $hexadecimal = 'U+110000'; // Max unicode hexadecimal +1
 
-        Character::ofHexadecimal($hexadecimal);
+        CodePoint::ofHexadecimal($hexadecimal);
     }
 
     public function testItCannotInstantiateOfHtmlEntityWithEmptyString(): void
@@ -234,16 +234,16 @@ final class CharacterTest extends TestCase
 
         $htmlEntity = '';
 
-        Character::ofHtmlEntity($htmlEntity);
+        CodePoint::ofHtmlEntity($htmlEntity);
     }
 
-    public function testItCannotInstantiateOfHtmlEntityWithMoreThanOneCharacter(): void
+    public function testItCannotInstantiateOfHtmlEntityWithMoreThanOneCodePoint(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $htmlEntity = '&copy;&nbsp;';
 
-        Character::ofHtmlEntity($htmlEntity);
+        CodePoint::ofHtmlEntity($htmlEntity);
     }
 
     public function testItCannotInstantiateOfXmlEntityWithEmptyString(): void
@@ -252,16 +252,16 @@ final class CharacterTest extends TestCase
 
         $xmlEntity = '';
 
-        Character::ofXmlEntity($xmlEntity);
+        CodePoint::ofXmlEntity($xmlEntity);
     }
 
-    public function testItCannotInstantiateOfXmlEntityWithMoreThanOneCharacter(): void
+    public function testItCannotInstantiateOfXmlEntityWithMoreThanOneCodePoint(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $xmlEntity = '&#x2122;&#x2dc;';
 
-        Character::ofXmlEntity($xmlEntity);
+        CodePoint::ofXmlEntity($xmlEntity);
     }
 
     public static function provideUnicodeMap(): array

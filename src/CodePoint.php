@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
-final class Character
+final class CodePoint
 {
     private function __construct(
         public readonly int $codePoint,
     ) {
         if ($codePoint < 0x0000 || $codePoint > 0x10FFFF) {
             throw new \OutOfRangeException(
-                "Character code point value `$codePoint` is out of range",
+                "Code point value `$codePoint` is out of range",
             );
         }
     }
@@ -30,7 +30,7 @@ final class Character
     ): self {
         if (mb_strlen($string) !== 1) {
             throw new \InvalidArgumentException(
-                "Cannot instantiate Character of char `$string`, length is not equal to 1",
+                "Cannot instantiate CodePoint of char `$string`, length is not equal to 1",
             );
         }
 
@@ -113,12 +113,6 @@ final class Character
 
     public function isCombining(): bool
     {
-//        return $this->decimal >= 768 && $this->decimal <= 879;
         return preg_match('#\p{Mn}#u', strval($this)) === 1;
     }
-
-//    public function resolveCodePointType(): string
-//    {
-//        // Graphic, Format, Control, Private-Use, Surrogate, Noncharacter, Reserved.
-//    }
 }
