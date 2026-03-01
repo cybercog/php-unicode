@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
+/**
+ * @phpstan-immutable
+ */
 final class GraphemeString implements \Stringable
 {
     /**

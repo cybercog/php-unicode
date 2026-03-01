@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
+/**
+ * @phpstan-immutable
+ */
 final class UnicodeString implements \Stringable
 {
     /**
@@ -36,18 +39,11 @@ final class UnicodeString implements \Stringable
     public static function of(
         string $string,
     ): self {
-        $charList = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-        if ($charList === false) {
-            throw new \InvalidArgumentException(
-                'Failed to split string into code points',
-            );
-        }
-
+        $codePointStringList = mb_str_split($string);
         $codePointList = [];
 
-        foreach ($charList as $char) {
-            $codePointList[] = CodePoint::of($char);
+        foreach ($codePointStringList as $codePointString) {
+            $codePointList[] = CodePoint::of($codePointString);
         }
 
         return new self(

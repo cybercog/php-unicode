@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
+/**
+ * @phpstan-immutable
+ */
 final class Grapheme implements \Stringable
 {
     /**
@@ -37,14 +40,7 @@ final class Grapheme implements \Stringable
             );
         }
 
-        $codePointStringList = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-        if ($codePointStringList === false) {
-            throw new \InvalidArgumentException(
-                'Failed to split string into code points',
-            );
-        }
-
+        $codePointStringList = mb_str_split($string);
         $codePointList = [];
 
         foreach ($codePointStringList as $codePointString) {
