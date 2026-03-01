@@ -38,6 +38,12 @@ final class UnicodeString implements \Stringable
     ): self {
         $charList = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
 
+        if ($charList === false) {
+            throw new \InvalidArgumentException(
+                'Failed to split string into code points',
+            );
+        }
+
         $codePointList = [];
 
         foreach ($charList as $char) {

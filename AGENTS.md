@@ -25,9 +25,12 @@ docker compose run php85 vendor/bin/phpunit test/Unit/CodePointTest.php
 
 # Run a single test method
 docker compose run php85 vendor/bin/phpunit --filter testMethodName
+
+# Run static analysis
+docker compose run php85 vendor/bin/phpstan analyse
 ```
 
-No linter or static analysis tool is configured.
+Static analysis uses PHPStan at level 9 with strict-rules. Config: `phpstan.neon.dist`.
 
 ## Architecture
 

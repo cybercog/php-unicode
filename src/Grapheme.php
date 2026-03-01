@@ -39,6 +39,12 @@ final class Grapheme implements \Stringable
 
         $codePointStringList = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
 
+        if ($codePointStringList === false) {
+            throw new \InvalidArgumentException(
+                'Failed to split string into code points',
+            );
+        }
+
         $codePointList = [];
 
         foreach ($codePointStringList as $codePointString) {
