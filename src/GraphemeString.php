@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
-final class GraphemeString
+final class GraphemeString implements \Stringable
 {
     /**
      * @param list<Grapheme> $graphemeList

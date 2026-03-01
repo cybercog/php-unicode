@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
-final class Grapheme
+final class Grapheme implements \Stringable
 {
     /**
      * @param list<CodePoint> $codePointList

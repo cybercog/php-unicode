@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
-final class CodePoint
+final class CodePoint implements \Stringable
 {
     private function __construct(
         private readonly int $value,
