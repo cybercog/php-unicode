@@ -35,3 +35,31 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit --testdox
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, intl
+          tools: composer:v2
+          coverage: pcov
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Generate coverage report
+        run: vendor/bin/phpunit --coverage-clover coverage.xml --coverage-html coverage-html
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-html/
