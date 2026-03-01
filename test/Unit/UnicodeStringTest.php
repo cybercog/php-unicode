@@ -37,7 +37,7 @@ final class UnicodeStringTest extends TestCase
 
         $text = UnicodeString::of($string);
 
-        $codePointList = $text->codePointList();
+        $codePointList = $text->codePointList;
         $this->assertSame('Á', strval($codePointList[0]));
         $this->assertSame('Æ', strval($codePointList[1]));
         $this->assertSame('Ö', strval($codePointList[2]));

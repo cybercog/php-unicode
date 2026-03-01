@@ -61,7 +61,7 @@ final class GraphemeTest extends TestCase
     {
         $grapheme = Grapheme::of('A');
 
-        $codePointList = $grapheme->codePointList();
+        $codePointList = $grapheme->codePointList;
         $this->assertCount(1, $codePointList);
         $this->assertSame('A', strval($codePointList[0]));
     }
@@ -71,7 +71,7 @@ final class GraphemeTest extends TestCase
         // e + combining acute accent
         $grapheme = Grapheme::of("e\u{0301}");
 
-        $codePointList = $grapheme->codePointList();
+        $codePointList = $grapheme->codePointList;
         $this->assertCount(2, $codePointList);
         $this->assertSame('e', strval($codePointList[0]));
         $this->assertSame("\u{0301}", strval($codePointList[1]));
@@ -133,6 +133,10 @@ final class GraphemeTest extends TestCase
             'precomposed A with acute' => ['Á'],
             'Euro sign' => ['€'],
             'Emoji man' => ['👨'],
+            'Arabic letter' => ["\u{0645}"],
+            'Thai letter' => ["\u{0E01}"],
+            'Korean Hangul syllable' => ["\u{D55C}"],
+            'Devanagari letter' => ["\u{0915}"],
         ];
     }
 
@@ -142,6 +146,8 @@ final class GraphemeTest extends TestCase
             'decomposed e + combining acute' => ["e\u{0301}", 2],
             'family emoji' => ['👨‍👩‍👧‍👦', 7],
             'flag emoji' => ['🇦🇶', 2],
+            'Thai with tone mark' => ["\u{0E01}\u{0E48}", 2],
+            'Devanagari with vowel sign' => ["\u{0928}\u{093F}", 2],
         ];
     }
 }

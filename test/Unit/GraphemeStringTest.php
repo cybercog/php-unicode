@@ -39,7 +39,7 @@ final class GraphemeStringTest extends TestCase
 
         $text = GraphemeString::of($string);
 
-        $graphemeList = $text->graphemeList();
+        $graphemeList = $text->graphemeList;
         $this->assertCount(4, $graphemeList);
         $this->assertSame('Á', strval($graphemeList[0]));
         $this->assertSame('Æ', strval($graphemeList[1]));
@@ -107,7 +107,7 @@ final class GraphemeStringTest extends TestCase
         $text = GraphemeString::ofGraphemeList($graphemeList);
 
         $this->assertSame('Hi', strval($text));
-        $this->assertCount(2, $text->graphemeList());
+        $this->assertCount(2, $text->graphemeList);
     }
 
     public function testToStringRoundTrip(): void
@@ -125,5 +125,51 @@ final class GraphemeStringTest extends TestCase
 
         $this->assertCount(0, $text->graphemeList);
         $this->assertSame('', strval($text));
+    }
+
+    public function testArabicString(): void
+    {
+        // مرحبا — 5 Arabic letters, each a single grapheme
+        $string = "\u{0645}\u{0631}\u{062D}\u{0628}\u{0627}";
+
+        $text = GraphemeString::of($string);
+
+        $this->assertCount(5, $text->graphemeList);
+        $this->assertSame($string, strval($text));
+    }
+
+    public function testThaiWithCombiningMarks(): void
+    {
+        // ก่อ — ko kai + mai ek + o ang = 2 graphemes (ก่ and อ)
+        $string = "\u{0E01}\u{0E48}\u{0E2D}";
+
+        $text = GraphemeString::of($string);
+
+        $this->assertCount(2, $text->graphemeList);
+        $this->assertSame("\u{0E01}\u{0E48}", strval($text->graphemeList[0]));
+        $this->assertSame("\u{0E2D}", strval($text->graphemeList[1]));
+    }
+
+    public function testKoreanHangulString(): void
+    {
+        // 한글 — 2 Hangul syllables, each a single grapheme
+        $string = "\u{D55C}\u{AE00}";
+
+        $text = GraphemeString::of($string);
+
+        $this->assertCount(2, $text->graphemeList);
+        $this->assertSame("\u{D55C}", strval($text->graphemeList[0]));
+        $this->assertSame("\u{AE00}", strval($text->graphemeList[1]));
+    }
+
+    public function testDevanagariWithCombiningMarks(): void
+    {
+        // नि — na + i vowel sign = 1 grapheme with 2 code points
+        $string = "\u{0928}\u{093F}";
+
+        $text = GraphemeString::of($string);
+
+        $this->assertCount(1, $text->graphemeList);
+        $this->assertSame($string, strval($text->graphemeList[0]));
     }
 }

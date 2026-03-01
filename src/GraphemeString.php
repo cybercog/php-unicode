@@ -65,12 +65,4 @@ final class GraphemeString
     {
         return implode('', $this->graphemeList);
     }
-
-    /**
-     * @return list<Grapheme>
-     */
-    public function graphemeList(): array
-    {
-        return $this->graphemeList;
-    }
 }

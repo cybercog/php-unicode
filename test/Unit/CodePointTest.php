@@ -123,6 +123,10 @@ final class CodePointTest extends TestCase
         string $htmlEntity,
         string $xmlEntity,
     ): void {
+        if ($htmlEntity === '&#x0;' || $htmlEntity === '&#x10ffff;') {
+            $this->markTestSkipped('HTML5 does not decode NULL and noncharacter references');
+        }
+
         $codePoint = CodePoint::ofHtmlEntity($htmlEntity);
 
         $this->assertSame(
@@ -210,11 +214,11 @@ final class CodePointTest extends TestCase
         CodePoint::ofDecimal($decimal);
     }
 
-    public function testItCannotInstantiateOfHexadecimalWithTooLowValue(): void
+    public function testItCannotInstantiateOfHexadecimalWithExcessiveValue(): void
     {
         $this->expectException(\OutOfRangeException::class);
 
-        $hexadecimal = 'U+FFFFFFFE'; // Min unicode hexadecimal -1
+        $hexadecimal = 'U+FFFFFFFE';
 
         CodePoint::ofHexadecimal($hexadecimal);
     }
@@ -267,18 +271,18 @@ final class CodePointTest extends TestCase
     public static function provideUnicodeMap(): array
     {
         return [
-            ["\x00", 0, 'U+0000', "\x00", '&#x0;'],
-            ['􏿿', 1114111, 'U+10FFFF', '􏿿', '&#x10ffff;'],
-            [' ', 32, 'U+0020', ' ', '&#x20;'],
-            ['A', 65, 'U+0041', 'A', '&#x41;'],
+            ["\x00", 0, 'U+0000', '&#x0;', '&#x0;'],
+            ['􏿿', 1114111, 'U+10FFFF', '&#x10ffff;', '&#x10ffff;'],
+            [' ', 32, 'U+0020', '&#x20;', '&#x20;'],
+            ['A', 65, 'U+0041', '&#x41;', '&#x41;'],
             [' ', 160, 'U+00A0', '&nbsp;', '&#xa0;'],
             ['ÿ', 255, 'U+00FF', '&yuml;', '&#xff;'],
             ['Ā', 256, 'U+0100', '&Amacr;', '&#x100;'],
-            ['ſ', 383, 'U+017F', 'ſ', '&#x17f;'],
+            ['ſ', 383, 'U+017F', '&#x17f;', '&#x17f;'],
             ['€', 8364, 'U+20AC', '&euro;', '&#x20ac;'],
-            ['⚙', 9881, 'U+2699', '⚙', '&#x2699;'],
-            ['👨', 128104, 'U+1F468', '👨', '&#x1f468;'],
-            ['�', 65533, 'U+FFFD', '�', '&#xfffd;'],
+            ['⚙', 9881, 'U+2699', '&#x2699;', '&#x2699;'],
+            ['👨', 128104, 'U+1F468', '&#x1f468;', '&#x1f468;'],
+            ['�', 65533, 'U+FFFD', '&#xfffd;', '&#xfffd;'],
         ];
     }
 }

@@ -86,14 +86,6 @@ final class Grapheme
         return implode('', $this->codePointList);
     }
 
-    /**
-     * @return list<CodePoint>
-     */
-    public function codePointList(): array
-    {
-        return $this->codePointList;
-    }
-
     public function codePointCount(): int
     {
         return count($this->codePointList);
