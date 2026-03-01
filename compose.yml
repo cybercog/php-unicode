@@ -3,7 +3,7 @@ services:
     container_name: php-unicode-lib-81
     build:
       context: ./
-      dockerfile: ./.docker/Dockerfile
+      dockerfile: ./.docker/php.Dockerfile
       args:
         PHP_VERSION: "8.1"
     tty: true
@@ -15,7 +15,7 @@ services:
     container_name: php-unicode-lib-82
     build:
       context: ./
-      dockerfile: ./.docker/Dockerfile
+      dockerfile: ./.docker/php.Dockerfile
       args:
         PHP_VERSION: "8.2"
     tty: true
@@ -27,7 +27,7 @@ services:
     container_name: php-unicode-lib-83
     build:
       context: ./
-      dockerfile: ./.docker/Dockerfile
+      dockerfile: ./.docker/php.Dockerfile
       args:
         PHP_VERSION: "8.3"
     tty: true
@@ -39,7 +39,7 @@ services:
     container_name: php-unicode-lib-84
     build:
       context: ./
-      dockerfile: ./.docker/Dockerfile
+      dockerfile: ./.docker/php.Dockerfile
       args:
         PHP_VERSION: "8.4"
     tty: true
@@ -51,7 +51,7 @@ services:
     container_name: php-unicode-lib-85
     build:
       context: ./
-      dockerfile: ./.docker/Dockerfile
+      dockerfile: ./.docker/php.Dockerfile
       args:
         PHP_VERSION: "8.5"
     tty: true
