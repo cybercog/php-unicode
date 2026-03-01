@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Test\\Unit\\Cog\\Unicode\\": "test/"
+            "Test\\Unit\\Cog\\Unicode\\": "test/Unit/"
         }
     },
     "require": {
