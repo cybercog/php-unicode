@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Test\Unit\Cog\Unicode;
 
 use Cog\Unicode\Character;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class CharacterTest extends TestCase
 {
-    /** @dataProvider provideUnicodeMap */
+    #[DataProvider('provideUnicodeMap')]
     public function testItCanInstantiateOfCharacter(
         string $char,
         int $decimal,
@@ -50,7 +51,7 @@ final class CharacterTest extends TestCase
         );
     }
 
-    /** @dataProvider provideUnicodeMap */
+    #[DataProvider('provideUnicodeMap')]
     public function testItCanInstantiateOfDecimal(
         string $char,
         int $decimal,
@@ -82,7 +83,7 @@ final class CharacterTest extends TestCase
         );
     }
 
-    /** @dataProvider provideUnicodeMap */
+    #[DataProvider('provideUnicodeMap')]
     public function testItCanInstantiateOfHexadecimal(
         string $char,
         int $decimal,
@@ -114,7 +115,7 @@ final class CharacterTest extends TestCase
         );
     }
 
-    /** @dataProvider provideUnicodeMap */
+    #[DataProvider('provideUnicodeMap')]
     public function testItCanInstantiateOfHtmlEntity(
         string $char,
         int $decimal,
@@ -146,7 +147,7 @@ final class CharacterTest extends TestCase
         );
     }
 
-    /** @dataProvider provideUnicodeMap */
+    #[DataProvider('provideUnicodeMap')]
     public function testItCanInstantiateOfXmlEntity(
         string $char,
         int $decimal,
