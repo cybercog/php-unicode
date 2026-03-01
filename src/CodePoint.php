@@ -23,6 +23,12 @@ final class CodePoint
                 "Code point value `$value` is out of range",
             );
         }
+
+        if ($value >= 0xD800 && $value <= 0xDFFF) {
+            throw new \OutOfRangeException(
+                sprintf('Code point U+%04X is a surrogate and not a valid Unicode scalar value', $value),
+            );
+        }
     }
 
     public static function of(
@@ -64,23 +70,69 @@ final class CodePoint
     public static function ofHtmlEntity(
         string $htmlEntity,
     ): self {
-        return self::of(
-            html_entity_decode(
-                $htmlEntity,
-                ENT_HTML5 | ENT_QUOTES | ENT_SUBSTITUTE,
-            ),
+        if (preg_match('/^&([a-zA-Z][a-zA-Z0-9]*|#[0-9]+|#x[0-9a-fA-F]+);$/', $htmlEntity) !== 1) {
+            throw new \InvalidArgumentException(
+                "Invalid HTML entity: $htmlEntity",
+            );
+        }
+
+        self::rejectSurrogateNumericEntity($htmlEntity);
+
+        $decoded = html_entity_decode(
+            $htmlEntity,
+            ENT_HTML5 | ENT_QUOTES | ENT_SUBSTITUTE,
         );
+
+        if ($decoded === $htmlEntity) {
+            throw new \InvalidArgumentException(
+                "Unknown HTML entity: $htmlEntity",
+            );
+        }
+
+        return self::of($decoded);
     }
 
     public static function ofXmlEntity(
         string $xmlEntity,
     ): self {
-        return self::of(
-            html_entity_decode(
-                $xmlEntity,
-                ENT_XML1 | ENT_QUOTES | ENT_SUBSTITUTE,
-            ),
+        if (preg_match('/^&([a-zA-Z][a-zA-Z0-9]*|#[0-9]+|#x[0-9a-fA-F]+);$/', $xmlEntity) !== 1) {
+            throw new \InvalidArgumentException(
+                "Invalid XML entity: $xmlEntity",
+            );
+        }
+
+        self::rejectSurrogateNumericEntity($xmlEntity);
+
+        $decoded = html_entity_decode(
+            $xmlEntity,
+            ENT_XML1 | ENT_QUOTES | ENT_SUBSTITUTE,
         );
+
+        if ($decoded === $xmlEntity) {
+            throw new \InvalidArgumentException(
+                "Unknown XML entity: $xmlEntity",
+            );
+        }
+
+        return self::of($decoded);
+    }
+
+    private static function rejectSurrogateNumericEntity(
+        string $entity,
+    ): void {
+        if (preg_match('/^&#x([0-9a-fA-F]+);$/', $entity, $matches)) {
+            $value = hexdec($matches[1]);
+        } elseif (preg_match('/^&#([0-9]+);$/', $entity, $matches)) {
+            $value = (int) $matches[1];
+        } else {
+            return;
+        }
+
+        if ($value >= 0xD800 && $value <= 0xDFFF) {
+            throw new \InvalidArgumentException(
+                sprintf('%s references surrogate code point U+%04X', $entity, $value),
+            );
+        }
     }
 
     public function __toString(): string
@@ -110,12 +162,12 @@ final class CodePoint
             return $entity;
         }
 
-        return '&#x' . dechex($this->value) . ';';
+        return '&#x' . strtoupper(dechex($this->value)) . ';';
     }
 
     public function toXmlEntity(): string
     {
-        return '&#x' . dechex($this->value) . ';';
+        return '&#x' . strtoupper(dechex($this->value)) . ';';
     }
 
     public function isCombining(): bool
