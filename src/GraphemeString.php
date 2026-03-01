@@ -53,7 +53,15 @@ final class GraphemeString implements \Stringable
         $graphemeList = [];
 
         for ($i = 0; $i < $length; $i++) {
-            $graphemeList[] = Grapheme::of(grapheme_substr($string, $i, 1));
+            $grapheme = grapheme_substr($string, $i, 1);
+
+            if ($grapheme === false) {
+                throw new \InvalidArgumentException(
+                    'Failed to extract grapheme at offset ' . $i,
+                );
+            }
+
+            $graphemeList[] = Grapheme::of($grapheme);
         }
 
         return new self(

@@ -63,7 +63,7 @@ final class CodePoint implements \Stringable
         }
 
         return new self(
-            hexdec(substr($hexadecimal, 2)),
+            (int) hexdec(substr($hexadecimal, 2)),
         );
     }
 
@@ -120,9 +120,9 @@ final class CodePoint implements \Stringable
     private static function rejectSurrogateNumericEntity(
         string $entity,
     ): void {
-        if (preg_match('/^&#x([0-9a-fA-F]+);$/', $entity, $matches)) {
-            $value = hexdec($matches[1]);
-        } elseif (preg_match('/^&#([0-9]+);$/', $entity, $matches)) {
+        if (preg_match('/^&#x([0-9a-fA-F]+);$/', $entity, $matches) === 1) {
+            $value = (int) hexdec($matches[1]);
+        } elseif (preg_match('/^&#([0-9]+);$/', $entity, $matches) === 1) {
             $value = (int) $matches[1];
         } else {
             return;
