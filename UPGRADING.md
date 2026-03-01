@@ -114,8 +114,6 @@ Two new classes for working with grapheme clusters (user-perceived characters):
 use Cog\Unicode\Grapheme;
 
 $grapheme = Grapheme::of('👨‍👩‍👧‍👦'); // family emoji — single grapheme, multiple code points
-$grapheme->codePointCount(); // 7
-$grapheme->isSingleCodePoint(); // false
 $grapheme->codePointList; // list<CodePoint>
 
 $grapheme = Grapheme::ofCodePointList([
