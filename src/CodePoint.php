@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Cog\Unicode;
 
-final class Character
+final class CodePoint
 {
     private function __construct(
-        public readonly int $codePoint,
+        private readonly int $value,
     ) {
-        if ($codePoint < 0x0000 || $codePoint > 0x10FFFF) {
+        if ($value < 0x0000 || $value > 0x10FFFF) {
             throw new \OutOfRangeException(
-                "Character code point value `$codePoint` is out of range",
+                "Code point value `$value` is out of range",
             );
         }
     }
@@ -30,7 +30,7 @@ final class Character
     ): self {
         if (mb_strlen($string) !== 1) {
             throw new \InvalidArgumentException(
-                "Cannot instantiate Character of char `$string`, length is not equal to 1",
+                "Cannot instantiate CodePoint of char `$string`, length is not equal to 1",
             );
         }
 
@@ -57,7 +57,7 @@ final class Character
         }
 
         return new self(
-            hexdec($hexadecimal),
+            hexdec(substr($hexadecimal, 2)),
         );
     }
 
@@ -85,40 +85,41 @@ final class Character
 
     public function __toString(): string
     {
-        return mb_chr($this->codePoint);
+        return mb_chr($this->value);
     }
 
     public function toDecimal(): int
     {
-        return $this->codePoint;
+        return $this->value;
     }
 
     public function toHexadecimal(): string
     {
-        return sprintf('U+%04X', $this->codePoint);
+        return sprintf('U+%04X', $this->value);
     }
 
     public function toHtmlEntity(): string
     {
-        return htmlentities(
-            strval($this),
+        $char = strval($this);
+        $entity = htmlentities(
+            $char,
             ENT_HTML5 | ENT_QUOTES | ENT_SUBSTITUTE,
         );
+
+        if ($entity !== $char) {
+            return $entity;
+        }
+
+        return '&#x' . dechex($this->value) . ';';
     }
 
     public function toXmlEntity(): string
     {
-        return '&#x' . dechex($this->codePoint) . ';';
+        return '&#x' . dechex($this->value) . ';';
     }
 
     public function isCombining(): bool
     {
-//        return $this->decimal >= 768 && $this->decimal <= 879;
-        return preg_match('#\p{Mn}#u', strval($this)) === 1;
+        return preg_match('#\p{M}#u', strval($this)) === 1;
     }
-
-//    public function resolveCodePointType(): string
-//    {
-//        // Graphic, Format, Control, Private-Use, Surrogate, Noncharacter, Reserved.
-//    }
 }

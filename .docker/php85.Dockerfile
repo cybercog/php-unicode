@@ -6,6 +6,9 @@ FROM php:8.5-cli-alpine AS dev
 RUN apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS
 
+RUN apk add --no-cache icu-dev icu-libs \
+    && docker-php-ext-install intl
+
 # Cleanup apk cache and temp files
 RUN rm -rf /var/cache/apk/* /tmp/*
 

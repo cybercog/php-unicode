@@ -24,11 +24,11 @@ final class UnicodeStringTest extends TestCase
 
         $text = UnicodeString::of($string);
 
-        $characterList = $text->characterList;
-        $this->assertSame('M', strval($characterList[0]));
-        $this->assertSame('a', strval($characterList[1]));
-        $this->assertSame('r', strval($characterList[2]));
-        $this->assertSame('k', strval($characterList[3]));
+        $codePointList = $text->codePointList;
+        $this->assertSame('M', strval($codePointList[0]));
+        $this->assertSame('a', strval($codePointList[1]));
+        $this->assertSame('r', strval($codePointList[2]));
+        $this->assertSame('k', strval($codePointList[3]));
     }
 
     public function testComposedChars(): void
@@ -37,40 +37,42 @@ final class UnicodeStringTest extends TestCase
 
         $text = UnicodeString::of($string);
 
-        $characterList = $text->characterList();
-        $this->assertSame('Á', strval($characterList[0]));
-        $this->assertSame('Æ', strval($characterList[1]));
-        $this->assertSame('Ö', strval($characterList[2]));
-        $this->assertSame('é', strval($characterList[3]));
+        $codePointList = $text->codePointList;
+        $this->assertSame('Á', strval($codePointList[0]));
+        $this->assertSame('Æ', strval($codePointList[1]));
+        $this->assertSame('Ö', strval($codePointList[2]));
+        $this->assertSame('é', strval($codePointList[3]));
     }
 
-    public function testCombiningChars(): void
+    public function testCombiningCharsAsSeparateCodePoints(): void
     {
-        $this->markTestIncomplete('Implement combining chars');
-
-        $string = 'Á̀b́ćd́';
+        // A + combining acute + combining grave = 3 code points
+        $string = "A\u{0301}\u{0300}";
 
         $text = UnicodeString::of($string);
 
-        $characterList = $text->characterList;
-        $this->assertSame('Á̀', strval($characterList[0]));
-        $this->assertSame('b́', strval($characterList[1]));
-        $this->assertSame('ć', strval($characterList[2]));
-        $this->assertSame('d́', strval($characterList[3]));
+        $codePointList = $text->codePointList;
+        $this->assertCount(3, $codePointList);
+        $this->assertSame('A', strval($codePointList[0]));
+        $this->assertSame("\u{0301}", strval($codePointList[1]));
+        $this->assertSame("\u{0300}", strval($codePointList[2]));
     }
 
-    public function testEmojiCombiningChars(): void
+    public function testEmojiZwjSequenceAsSeparateCodePoints(): void
     {
-        $this->markTestIncomplete('Implement combining chars');
-
+        // 👨‍👩‍👧‍👦 = 👨 ZWJ 👩 ZWJ 👧 ZWJ 👦 = 7 code points
         $string = '👨‍👩‍👧‍👦';
 
         $text = UnicodeString::of($string);
 
-        $characterList = $text->characterList;
-        $this->assertSame('👨', strval($characterList[0]));
-        $this->assertSame('👩', strval($characterList[1]));
-        $this->assertSame('👧', strval($characterList[2]));
-        $this->assertSame('👦', strval($characterList[3]));
+        $codePointList = $text->codePointList;
+        $this->assertCount(7, $codePointList);
+        $this->assertSame('👨', strval($codePointList[0]));
+        $this->assertSame("\u{200D}", strval($codePointList[1]));
+        $this->assertSame('👩', strval($codePointList[2]));
+        $this->assertSame("\u{200D}", strval($codePointList[3]));
+        $this->assertSame('👧', strval($codePointList[4]));
+        $this->assertSame("\u{200D}", strval($codePointList[5]));
+        $this->assertSame('👦', strval($codePointList[6]));
     }
 }
